@@ -4,6 +4,7 @@ export const Sizes = {
 		normal: 14,
 		large: 16,
 		larger: 18,
+		largest: 22,
 	},
 	padding: {
 		small: 4,
