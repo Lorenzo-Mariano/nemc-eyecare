@@ -4,6 +4,7 @@ import {
 	HomeHospital,
 	IconoirProvider,
 	Mail,
+	ProfileCircle,
 } from "iconoir-react-native";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { useState } from "react";
@@ -59,6 +60,13 @@ export default function TabLayout() {
 					options={{
 						title: "Messages",
 						tabBarIcon: ({ color }) => <Mail color={color} />,
+					}}
+				/>
+				<Tabs.Screen
+					name="profile"
+					options={{
+						title: "Profile",
+						tabBarIcon: ({ color }) => <ProfileCircle color={color} />,
 					}}
 				/>
 			</Tabs>
