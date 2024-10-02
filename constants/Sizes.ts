@@ -12,4 +12,18 @@ export const Sizes = {
 		large: 10,
 		larger: 12,
 	},
+	margin: {
+		small: 4,
+		normal: 6,
+		large: 10,
+		larger: 12,
+	},
+	borderRadius: {
+		none: 0,
+		small: 6,
+		medium: 8,
+		large: 10,
+		larger: 12,
+		largest: 16,
+	},
 };
