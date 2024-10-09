@@ -13,6 +13,8 @@ export default function Header({ title }: { title: string }) {
 			style={{
 				alignItems: "center",
 				padding: Sizes.padding.normal,
+				borderBottomColor: "#bdbdbd",
+				borderBottomWidth: 0.5,
 				backgroundColor:
 					scheme === "dark" ? Colors.dark.background : Colors.light.background,
 			}}
