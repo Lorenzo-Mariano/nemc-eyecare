@@ -87,7 +87,7 @@ export default function index() {
 								fontSize: Sizes.text.normal,
 							}}
 						>
-							Find a Doctor
+							Find a Doctor (and some better icons while you're at it lmao)
 						</Text>
 					</View>
 				</View>
