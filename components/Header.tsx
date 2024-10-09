@@ -12,7 +12,7 @@ export default function Header({ title }: { title: string }) {
 		<SafeAreaView
 			style={{
 				alignItems: "center",
-				padding: Sizes.padding.normal,
+				padding: Sizes.padding.larger,
 				borderBottomColor: "#bdbdbd",
 				borderBottomWidth: 0.5,
 				backgroundColor:
