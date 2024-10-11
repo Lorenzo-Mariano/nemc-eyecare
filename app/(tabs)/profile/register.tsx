@@ -17,6 +17,7 @@ import { api } from "@/api/api";
 import AddressForm from "@/components/register-form/AddressForm";
 import AuthenticationForm from "@/components/register-form/AuthenticationForm";
 import PersonalDetailsForm from "@/components/register-form/PersonalDetailsForm";
+import { Link } from "expo-router";
 
 export default function Register() {
 	const scheme = useColorScheme();
@@ -71,8 +72,13 @@ export default function Register() {
 
 	return (
 		<ScrollView style={styles(scheme).scrollView}>
-			<Text style={styles(scheme).headerText}>Register</Text>
 			<View style={styles(scheme).formSection}>
+				<View style={styles(scheme).header}>
+					<Link href={"/(tabs)/profile/"} style={styles(scheme).linkWrapper}>
+						Back
+					</Link>
+					<Text style={styles(scheme).headerText}>Register</Text>
+				</View>
 				<PersonalDetailsForm
 					formData={formData}
 					handleInputChange={handleInputChange}
@@ -113,11 +119,24 @@ const styles = (scheme: ColorSchemeName) => {
 			padding: Sizes.padding.large,
 			backgroundColor: Colors.light.darkerBackground,
 		},
-		headerText: {
-			color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
-			marginBottom: Sizes.margin.larger,
-			fontSize: Sizes.text.largest,
+		header: {
+			flexDirection: "row",
+			alignItems: "center",
 			padding: Sizes.padding.larger,
+
+			borderColor: "#ccc",
+			borderBottomWidth: 1,
+		},
+		linkWrapper: {
+			position: "absolute",
+			left: 0,
+			paddingHorizontal: 10,
+			color: Colors.light.theme,
+		},
+		headerText: {
+			flex: 1,
+			color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
+			fontSize: Sizes.text.largest,
 			textAlign: "center",
 			fontWeight: "bold",
 		},
