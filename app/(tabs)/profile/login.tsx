@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 
@@ -7,14 +8,8 @@ export default function Login() {
 	const [password, setPassword] = useState("");
 	const [isSubmitting, setSubmitting] = useState(false);
 
-	const handleLogin = async () => {
+	const handleLogin = async (email: string, password: string) => {
 		setSubmitting(true);
-
-		if (!email || !password) {
-			Alert.alert("Validation Error", "Please enter both email and password.");
-			return setSubmitting(false);
-		}
-
 		try {
 			const response = await fetch(
 				`${process.env.EXPO_PUBLIC_DEV_API}/auth/login`,
@@ -23,25 +18,40 @@ export default function Login() {
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify({
-						email: email.trim(),
-						password: password.trim(),
-					}),
+					body: JSON.stringify({ email, password }),
 				}
 			);
 
 			const result = await response.json();
 
 			if (response.ok) {
-				Alert.alert("Success", result.message);
+				const { token, user } = result;
+
+				await AsyncStorage.setItem("authToken", token);
+				await AsyncStorage.setItem(
+					"userData",
+					JSON.stringify({
+						_id: user._id,
+						firstName: user.firstName,
+						lastName: user.lastName,
+						email: user.email,
+						age: user.age,
+						gender: user.gender,
+						phoneNumber: user.phoneNumber,
+					})
+				);
+
+				Alert.alert("Login Successful", `Welcome back, ${user.firstName}!`);
+				setSubmitting(false);
 			} else {
-				Alert.alert("Login Error", result.message || "Error occurred.");
+				setSubmitting(false);
+				Alert.alert("Login Failed", result.message);
 			}
 		} catch (error) {
-			Alert.alert("Network Error", "An error occurred during login.");
+			setSubmitting(false);
+			console.error("Login error", error);
+			Alert.alert("Error", "Something went wrong, please try again.");
 		}
-
-		setSubmitting(false);
 	};
 
 	return (
@@ -67,7 +77,7 @@ export default function Login() {
 
 			<Button
 				title={isSubmitting ? "Logging in..." : "Login"}
-				onPress={handleLogin}
+				onPress={() => handleLogin(email, password)}
 				disabled={isSubmitting}
 			/>
 		</View>

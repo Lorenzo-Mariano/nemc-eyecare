@@ -19,79 +19,16 @@ export default function index() {
 						: Colors.light.darkerBackground,
 			}}
 		>
-			<View
+			<Text
 				style={{
-					marginTop: Sizes.margin.small,
+					fontSize: Sizes.text.largest,
+					fontWeight: "bold",
+					textAlign: "center",
+					padding: Sizes.padding.larger,
 				}}
 			>
-				<Text
-					style={{
-						color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
-						fontSize: Sizes.text.largest,
-						fontWeight: "bold",
-					}}
-				>
-					Welcome, Pedro
-				</Text>
-
-				<Text
-					style={{
-						fontSize: Sizes.text.normal,
-						color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
-					}}
-				>
-					You have so-and-so appointments this month.
-				</Text>
-				<Text
-					style={{
-						fontSize: Sizes.text.normal,
-						color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
-					}}
-				>
-					Remember to take so-and-so drug [freq.] times a [day/week/month] for
-					[time span days/weeks/month]
-				</Text>
-			</View>
-			<View>
-				<Text
-					style={{
-						color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
-						fontSize: Sizes.text.largest,
-						fontWeight: "bold",
-						marginBottom: Sizes.margin.large,
-					}}
-				>
-					Services
-				</Text>
-				<View
-					style={{
-						flexDirection: "row",
-						flexWrap: "wrap",
-						gap: Sizes.margin.large,
-					}}
-				>
-					<View
-						style={{
-							justifyContent: "center",
-							alignItems: "center",
-							borderRadius: Sizes.borderRadius.larger,
-
-							backgroundColor: "#72b4ed",
-							width: 72,
-							height: 72,
-						}}
-					>
-						<Text
-							style={{
-								color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
-								fontSize: Sizes.text.normal,
-							}}
-						>
-							Find a Doctor (and some better icons while you're at it lmao)
-						</Text>
-					</View>
-				</View>
-			</View>
+				Services
+			</Text>
 		</View>
 	);
 }

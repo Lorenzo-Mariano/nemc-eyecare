@@ -12,6 +12,7 @@ export const api = {
 			phoneNumber,
 			password,
 			confirmPassword,
+			address, // Add address here
 		} = {
 			firstName: formData.firstName.trim(),
 			lastName: formData.lastName.trim(),
@@ -22,6 +23,7 @@ export const api = {
 			phoneNumber: formData.phoneNumber.trim(),
 			password: formData.password.trim(),
 			confirmPassword: formData.confirmPassword.trim(),
+			address: formData.address, // Ensure address is passed as is
 		};
 
 		if (
@@ -33,7 +35,8 @@ export const api = {
 			!civilStatus ||
 			!phoneNumber ||
 			!password ||
-			!confirmPassword
+			!confirmPassword ||
+			!address // Check if address is provided
 		) {
 			return {
 				status: "Validation Error",
@@ -65,6 +68,7 @@ export const api = {
 			phoneNumber,
 			password,
 			confirmPassword,
+			address, // Include the address in the request payload
 		};
 
 		try {

@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Stack } from "expo-router/stack";
 
 export default function Layout() {
