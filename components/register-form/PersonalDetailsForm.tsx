@@ -4,11 +4,12 @@ import {
 	StyleSheet,
 	ColorSchemeName,
 	View,
+	TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
 import { RegisterFormData } from "@/types";
 import { Sizes } from "@/constants/Sizes";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -32,7 +33,6 @@ export default function PersonalDetailsForm({
 	return (
 		<>
 			<Text style={styles(scheme).sectionHeader}>Personal Details</Text>
-
 			<View style={{ flexDirection: "row", gap: Sizes.margin.normal }}>
 				<TextInput
 					placeholder="First Name"
@@ -75,22 +75,38 @@ export default function PersonalDetailsForm({
 				/>
 			</View>
 
-			<TextInput
-				placeholder="Birthday"
-				placeholderTextColor={"#ccc"}
-				value={formData.birthday.toISOString().slice(0, 10)}
-				onPress={() => setShowDatePicker(true)}
-				style={styles(scheme).input}
-			/>
+			<View>
+				<View
+					style={{
+						flexDirection: "row",
+						gap: Sizes.margin.normal,
+						marginBottom: Sizes.margin.large,
+					}}
+				>
+					<View style={styles(scheme).dateDisplay}>
+						<Text style={styles(scheme).dateText}>
+							{formData.birthday
+								? new Date(formData.birthday).toISOString().slice(0, 10)
+								: "YYYY-MM-DD"}
+						</Text>
+					</View>
+					<TouchableOpacity
+						style={styles(scheme).selectButton}
+						onPress={() => setShowDatePicker(true)}
+					>
+						<Text style={styles(scheme).buttonText}>Select Birthday</Text>
+					</TouchableOpacity>
+				</View>
 
-			{showDatePicker && (
-				<DateTimePicker
-					value={formData.birthday}
-					mode="date"
-					display="default"
-					onChange={handleDateChange}
-				/>
-			)}
+				{showDatePicker && (
+					<DateTimePicker
+						value={formData.birthday ? new Date(formData.birthday) : new Date()}
+						mode="date"
+						display="default"
+						onChange={handleDateChange}
+					/>
+				)}
+			</View>
 
 			<View style={styles(scheme).pickerWrapper}>
 				<Picker
@@ -147,6 +163,48 @@ const styles = (scheme: ColorSchemeName) => {
 			borderRadius: 5,
 			borderWidth: 1,
 			borderColor: "#ccc",
+		},
+		dateInput: {
+			backgroundColor:
+				scheme === "dark" ? Colors.dark.background : Colors.light.background,
+			color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
+			padding: 10,
+			marginBottom: 10,
+			borderRadius: 5,
+			borderWidth: 1,
+			borderColor: "#ccc",
+			justifyContent: "center",
+			alignItems: "center",
+		},
+		dateDisplay: {
+			flex: 1,
+			backgroundColor:
+				scheme === "dark" ? Colors.dark.background : Colors.light.background,
+			padding: 10,
+			borderRadius: 5,
+			borderWidth: 1,
+			borderColor: "#ccc",
+			justifyContent: "center",
+			alignItems: "center",
+		},
+		dateText: {
+			color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
+			fontSize: Sizes.text.normal,
+		},
+		selectButton: {
+			backgroundColor:
+				scheme === "dark" ? Colors.dark.background : Colors.light.background,
+			paddingVertical: 10,
+			paddingHorizontal: 20,
+			borderRadius: 5,
+			borderWidth: 1,
+			borderColor: Colors.light.theme,
+			justifyContent: "center",
+			alignItems: "center",
+		},
+		buttonText: {
+			color: scheme === "dark" ? Colors.dark.theme : Colors.light.theme,
+			fontSize: Sizes.text.normal,
 		},
 	});
 };

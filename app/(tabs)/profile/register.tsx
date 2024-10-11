@@ -25,7 +25,7 @@ export default function Register() {
 		firstName: "",
 		lastName: "",
 		email: "",
-		birthday: new Date(),
+		birthday: "",
 		gender: "",
 		phoneNumber: "",
 		password: "",
@@ -72,7 +72,6 @@ export default function Register() {
 	return (
 		<ScrollView style={styles(scheme).scrollView}>
 			<Text style={styles(scheme).headerText}>Register</Text>
-
 			<View style={styles(scheme).formSection}>
 				<PersonalDetailsForm
 					formData={formData}

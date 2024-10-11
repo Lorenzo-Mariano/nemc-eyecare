@@ -14,7 +14,7 @@ export interface RegisterFormData {
 	firstName: string;
 	lastName: string;
 	email: string;
-	birthday: Date;
+	birthday: string | Date;
 	gender: string;
 	civilStatus: string;
 	phoneNumber: string;

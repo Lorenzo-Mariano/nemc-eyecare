@@ -7,11 +7,11 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import React, { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import { User } from "@/types"; // Adjust the import according to your file structure
+import { User } from "@/types";
 
 export default function Profile() {
 	const scheme = useColorScheme();
-	const [user, setUser] = useState<User | null>(null); // Use User type or null
+	const [user, setUser] = useState<User | null>(null);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const checkAuthStatus = async () => {
@@ -19,7 +19,7 @@ export default function Profile() {
 		const userData = await AsyncStorage.getItem("userData");
 
 		if (token && userData) {
-			setUser(JSON.parse(userData)); // Parse the user data from AsyncStorage
+			setUser(JSON.parse(userData));
 			setIsLoggedIn(true);
 		} else {
 			setUser(null);
@@ -28,10 +28,10 @@ export default function Profile() {
 	};
 
 	const handleLogout = async () => {
-		await AsyncStorage.removeItem("authToken"); // Clear the token
-		await AsyncStorage.removeItem("userData"); // Clear user data
-		setUser(null); // Reset the user state
-		setIsLoggedIn(false); // Update login status
+		await AsyncStorage.removeItem("authToken");
+		await AsyncStorage.removeItem("userData");
+		setUser(null);
+		setIsLoggedIn(false);
 	};
 
 	useFocusEffect(
@@ -68,12 +68,6 @@ export default function Profile() {
 						<Text>Age: {user.age}</Text>
 						<Text>Gender: {user.gender}</Text>
 						<Text>Phone Number: {user.phoneNumber}</Text>
-						<Text>
-							Account Created: {new Date(user.createdAt).toLocaleDateString()}
-						</Text>
-						<Text>
-							Last Updated: {new Date(user.updatedAt).toLocaleDateString()}
-						</Text>
 						<TouchableOpacity
 							style={{
 								padding: Sizes.padding.large,
