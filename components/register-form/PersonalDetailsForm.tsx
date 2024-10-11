@@ -52,16 +52,18 @@ export default function PersonalDetailsForm({
 			</View>
 
 			<View style={{ flexDirection: "row", gap: Sizes.margin.normal }}>
-				<Picker
-					selectedValue={formData.gender}
-					onValueChange={(value) => handleInputChange("gender", value)}
-					style={styles(scheme).picker}
-					itemStyle={{ color: "#ccc" }}
-				>
-					<Picker.Item label="Gender" color="#ccc" value="" />
-					<Picker.Item label="Male" value="male" />
-					<Picker.Item label="Female" value="female" />
-				</Picker>
+				<View style={styles(scheme).pickerWrapper}>
+					<Picker
+						selectedValue={formData.gender}
+						onValueChange={(value) => handleInputChange("gender", value)}
+						style={styles(scheme).picker}
+						itemStyle={{ color: "#ccc" }}
+					>
+						<Picker.Item label="Gender" color="#ccc" value="" />
+						<Picker.Item label="Male" value="male" />
+						<Picker.Item label="Female" value="female" />
+					</Picker>
+				</View>
 
 				<TextInput
 					placeholder="Phone Number"
@@ -73,7 +75,6 @@ export default function PersonalDetailsForm({
 				/>
 			</View>
 
-			{/* Birthday picker */}
 			<TextInput
 				placeholder="Birthday"
 				placeholderTextColor={"#ccc"}
@@ -91,17 +92,20 @@ export default function PersonalDetailsForm({
 				/>
 			)}
 
-			{/* Civil Status Picker */}
-			<Picker
-				selectedValue={formData.civilStatus}
-				onValueChange={(value) => handleInputChange("civilStatus", value)}
-				style={styles(scheme).picker}
-				itemStyle={{ color: "#ccc" }}
-			>
-				<Picker.Item label="Civil Status" color="#ccc" value="" />
-				<Picker.Item label="Single" value="single" />
-				<Picker.Item label="Married" value="married" />
-			</Picker>
+			<View style={styles(scheme).pickerWrapper}>
+				<Picker
+					selectedValue={formData.civilStatus}
+					onValueChange={(value) => handleInputChange("civilStatus", value)}
+					style={styles(scheme).picker}
+					itemStyle={{ color: "#ccc" }}
+				>
+					<Picker.Item label="Civil Status" color="#ccc" value="" />
+					<Picker.Item label="Single" value="single" />
+					<Picker.Item label="Married" value="married" />
+					<Picker.Item label="Divorced" value="divorced" />
+					<Picker.Item label="Widowed" value="widowed" />
+				</Picker>
+			</View>
 		</>
 	);
 }
@@ -125,13 +129,21 @@ const styles = (scheme: ColorSchemeName) => {
 			borderWidth: 1,
 			borderColor: "#ccc",
 		},
+		pickerWrapper: {
+			flex: 1,
+			flexDirection: "row",
+			borderColor: "#ccc",
+			borderWidth: 1,
+			borderRadius: 5,
+			overflow: "hidden",
+			marginBottom: 10,
+			paddingRight: 20,
+		},
 		picker: {
 			flex: 1,
 			backgroundColor:
 				scheme === "dark" ? Colors.dark.background : Colors.light.background,
 			color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
-			padding: 10,
-			marginBottom: 10,
 			borderRadius: 5,
 			borderWidth: 1,
 			borderColor: "#ccc",
