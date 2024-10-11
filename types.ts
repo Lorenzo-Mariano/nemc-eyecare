@@ -17,8 +17,16 @@ export interface RegisterFormData {
 	email: string;
 	birthday: Date;
 	gender: string;
-	civilStatus: string;
+	civilStatus: "single" | "married" | "divorced" | "widowed";
 	phoneNumber: string;
 	password: string;
 	confirmPassword: string;
+	address: {
+		buildingNumber: string;
+		barangay: string;
+		cityMunicipality: string;
+		province: string;
+		district: string;
+		zipCode: string;
+	};
 }
