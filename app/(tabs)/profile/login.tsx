@@ -34,6 +34,8 @@ export default function Login() {
 
 			const result = await response.json();
 
+			console.log("Logging In:", result);
+
 			if (response.ok) {
 				const { token, user } = result;
 
@@ -45,9 +47,10 @@ export default function Login() {
 						firstName: user.firstName,
 						lastName: user.lastName,
 						email: user.email,
-						age: user.age,
+						birthday: user.birthday,
 						gender: user.gender,
 						phoneNumber: user.phoneNumber,
+						address: user.address,
 					})
 				);
 

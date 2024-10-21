@@ -17,21 +17,41 @@ export default function Profile() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const checkAuthStatus = async () => {
-		// Reminder: we're not yet verifying via the server
-		// This is just fetching the token from the storage.
-		// Therefore, prone to edge case errors.
+		try {
+			const token = await AsyncStorage.getItem("authToken");
+			const userData = await AsyncStorage.getItem("userData");
 
-		const token = await AsyncStorage.getItem("authToken");
-		const userData = await AsyncStorage.getItem("userData");
+			console.log("Local Storage User Data:", userData);
 
-		// If there is indeed a token, call the endpoint below
-		// to verify the validity of the JWT.
-		// `${process.env.EXPO_PUBLIC_DEV_API}/auth/login`
+			if (token && userData) {
+				const response = await fetch(
+					`${process.env.EXPO_PUBLIC_DEV_API}/auth/verify-token`,
+					{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				);
 
-		if (token && userData) {
-			setUser(JSON.parse(userData));
-			setIsLoggedIn(true);
-		} else {
+				const result = await response.json();
+
+				if (response.ok && result.valid) {
+					setUser(JSON.parse(userData));
+					setIsLoggedIn(true);
+				} else {
+					await AsyncStorage.removeItem("authToken");
+					await AsyncStorage.removeItem("userData");
+					setUser(null);
+					setIsLoggedIn(false);
+				}
+			} else {
+				setUser(null);
+				setIsLoggedIn(false);
+			}
+		} catch (error) {
+			console.error("Error checking authentication status:", error);
 			setUser(null);
 			setIsLoggedIn(false);
 		}
