@@ -23,7 +23,6 @@ export default function Profile() {
 
 			console.log("Local Storage User Data:", userData);
 
-			// I was calling the wrong endpoint this whole time...
 			if (token && userData) {
 				const response = await fetch(
 					`${process.env.EXPO_PUBLIC_DEV_API}/auth/login`,
