@@ -8,6 +8,8 @@ import React, { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { User } from "@/types";
+import AuthNav from "@/components/profile/AuthNav";
+import { Image } from "expo-image";
 
 export default function Profile() {
 	const scheme = useColorScheme();
@@ -15,8 +17,16 @@ export default function Profile() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const checkAuthStatus = async () => {
+		// Reminder: we're not yet verifying via the server
+		// This is just fetching the token from the storage.
+		// Therefore, prone to edge case errors.
+
 		const token = await AsyncStorage.getItem("authToken");
 		const userData = await AsyncStorage.getItem("userData");
+
+		// If there is indeed a token, call the endpoint below
+		// to verify the validity of the JWT.
+		// `${process.env.EXPO_PUBLIC_DEV_API}/auth/login`
 
 		if (token && userData) {
 			setUser(JSON.parse(userData));
@@ -40,6 +50,22 @@ export default function Profile() {
 		}, [])
 	);
 
+	const calculateAge = (birthday: string | Date) => {
+		const birthDate = new Date(birthday);
+		const today = new Date();
+		let age = today.getFullYear() - birthDate.getFullYear();
+		const monthDifference = today.getMonth() - birthDate.getMonth();
+
+		if (
+			monthDifference < 0 ||
+			(monthDifference === 0 && today.getDate() < birthDate.getDate())
+		) {
+			age--;
+		}
+
+		return age;
+	};
+
 	return (
 		<ScrollView
 			style={{
@@ -54,90 +80,39 @@ export default function Profile() {
 			<View style={styles.options}>
 				{isLoggedIn && user ? (
 					<View style={styles.userDetailsCard}>
-						<Text
-							style={{
-								fontWeight: "bold",
-								fontSize: Sizes.text.larger,
-								color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
-								marginBottom: Sizes.margin.larger,
-							}}
-						>
-							Welcome, {user.firstName} {user.lastName}!
-						</Text>
-						<Text>Email: {user.email}</Text>
-						<Text>Age: {user.age}</Text>
-						<Text>Gender: {user.gender}</Text>
-						<Text>Phone Number: {user.phoneNumber}</Text>
-						<TouchableOpacity
-							style={{
-								padding: Sizes.padding.large,
-								backgroundColor:
-									scheme === "dark" ? Colors.dark.theme : Colors.light.theme,
-								marginTop: Sizes.margin.larger,
-							}}
-							onPress={handleLogout} // Call handleLogout on press
-						>
+						<Image
+							style={styles.profilePicture}
+							source={
+								user.gender === "female"
+									? require("@/assets/images/profile/woman.png")
+									: require("@/assets/images/profile/man.png")
+							}
+							contentFit="scale-down"
+						/>
+
+						<View style={styles.dataWrapper}>
 							<Text
 								style={{
-									color: "#fff",
 									fontWeight: "bold",
-									textAlign: "center",
+									fontSize: Sizes.text.larger,
+									color:
+										scheme === "dark" ? Colors.dark.text : Colors.light.text,
+									marginBottom: Sizes.margin.larger,
 								}}
 							>
-								Logout
+								Welcome, {user.firstName} {user.lastName}!
 							</Text>
+							<Text>Email: {user.email}</Text>
+							<Text>Age: {calculateAge(user.birthday)}</Text>
+							<Text>Gender: {user.gender === "male" ? "Male" : "Female"}</Text>
+							<Text>Phone Number: {user.phoneNumber}</Text>
+						</View>
+						<TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
+							<Text style={styles.btnText}>Logout</Text>
 						</TouchableOpacity>
 					</View>
 				) : (
-					<>
-						<Text
-							style={{
-								fontWeight: "bold",
-								fontSize: Sizes.text.larger,
-								color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
-								marginBottom: Sizes.margin.larger,
-							}}
-						>
-							You are not logged in. Sign up or login to use all features.
-						</Text>
-
-						<TouchableOpacity
-							style={{
-								padding: Sizes.padding.large,
-								backgroundColor:
-									scheme === "dark" ? Colors.dark.theme : Colors.light.theme,
-							}}
-						>
-							<Link
-								href={"/profile/login"}
-								style={{
-									color: "#fff",
-									fontWeight: "bold",
-									textAlign: "center",
-								}}
-							>
-								Login
-							</Link>
-						</TouchableOpacity>
-						<TouchableOpacity
-							style={{
-								padding: Sizes.padding.large,
-								backgroundColor:
-									scheme === "dark" ? Colors.dark.theme : Colors.light.theme,
-							}}
-						>
-							<Link
-								href={"/profile/register"}
-								style={{
-									color: "#fff",
-									fontWeight: "bold",
-									textAlign: "center",
-								}}
-							>
-								Register
-							</Link>
-						</TouchableOpacity>
-					</>
+					<AuthNav />
 				)}
 			</View>
 		</ScrollView>
@@ -146,7 +121,7 @@ export default function Profile() {
 
 const styles = StyleSheet.create({
 	page: {
-		// flex: 1,
+		flex: 1,
 		justifyContent: "center",
 		alignContent: "center",
 	},
@@ -157,14 +132,41 @@ const styles = StyleSheet.create({
 	},
 
 	userDetailsCard: {
-		backgroundColor: "#fff", // Set background color to white
-		borderRadius: 10, // Add rounded corners
-		padding: Sizes.padding.large, // Add padding for spacing
-		shadowColor: "#000", // Set shadow color
-		shadowOffset: { width: 0, height: 1 }, // Set shadow offset
-		shadowOpacity: 0.2, // Set shadow opacity
-		shadowRadius: 2, // Set shadow blur radius
-		elevation: 3, // Android shadow
-		marginBottom: Sizes.margin.larger, // Space below the card
+		backgroundColor: "#fff",
+		borderRadius: 10,
+		padding: Sizes.padding.larger,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 1 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 3,
+		marginBottom: Sizes.margin.larger,
+		gap: Sizes.margin.large,
+	},
+
+	dataWrapper: {
+		borderColor: "#ccc",
+		borderTopWidth: 1,
+		borderBottomWidth: 1,
+		padding: Sizes.padding.normal,
+	},
+
+	profilePicture: {
+		height: 150,
+		width: "100%",
+		padding: 24,
+	},
+
+	logoutBtn: {
+		padding: Sizes.padding.large,
+		borderColor: Colors.light.theme,
+		borderWidth: 1,
+		borderRadius: 8,
+	},
+
+	btnText: {
+		color: Colors.light.theme,
+		fontWeight: "bold",
+		textAlign: "center",
 	},
 });
