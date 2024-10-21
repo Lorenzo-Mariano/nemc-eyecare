@@ -23,9 +23,10 @@ export default function Profile() {
 
 			console.log("Local Storage User Data:", userData);
 
+			// I was calling the wrong endpoint this whole time...
 			if (token && userData) {
 				const response = await fetch(
-					`${process.env.EXPO_PUBLIC_DEV_API}/auth/verify-token`,
+					`${process.env.EXPO_PUBLIC_DEV_API}/auth/login`,
 					{
 						method: "POST",
 						headers: {
@@ -36,13 +37,15 @@ export default function Profile() {
 				);
 
 				const result = await response.json();
+				console.log("Result of Auto Login:", result);
 
-				if (response.ok && result.valid) {
+				if (response.ok && result.success) {
 					setUser(JSON.parse(userData));
 					setIsLoggedIn(true);
 				} else {
 					await AsyncStorage.removeItem("authToken");
 					await AsyncStorage.removeItem("userData");
+
 					setUser(null);
 					setIsLoggedIn(false);
 				}
@@ -54,6 +57,11 @@ export default function Profile() {
 			console.error("Error checking authentication status:", error);
 			setUser(null);
 			setIsLoggedIn(false);
+		} finally {
+			console.log(
+				"userData after checking token:",
+				await AsyncStorage.getItem("userData")
+			);
 		}
 	};
 
