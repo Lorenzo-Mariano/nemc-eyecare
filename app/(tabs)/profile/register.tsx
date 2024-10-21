@@ -8,7 +8,9 @@ import {
 	StyleSheet,
 	ColorSchemeName,
 	ActivityIndicator,
+	TouchableOpacity,
 } from "react-native";
+import { useRouter } from "expo-router";
 import { Sizes } from "@/constants/Sizes";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
@@ -21,6 +23,7 @@ import { Link } from "expo-router";
 
 export default function Register() {
 	const scheme = useColorScheme();
+	const router = useRouter();
 
 	const [formData, setFormData] = useState({
 		firstName: "",
@@ -41,6 +44,8 @@ export default function Register() {
 			zipCode: "",
 		},
 	});
+
+	const [backBtnPressed, setBackBtnPressed] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
 
 	const handleInputChange = (name: string, value: any) => {
@@ -62,23 +67,52 @@ export default function Register() {
 
 	const handleRegister = async () => {
 		setSubmitting(true);
+
+		// If no bday, it's ""
+		// if chosen, it's 2024-10-10T02:05:00.000Z
+		// console.log(formData.birthday);
+
 		await api
 			.register(formData)
 			.then((res) => {
-				Alert.alert(res.status, res.msg);
+				Alert.alert(res.status, res.msg, [
+					{
+						text: "OK",
+						onPress: () => {
+							if (res.status === "Success") {
+								router.replace("/(tabs)/profile/login");
+							}
+						},
+					},
+				]);
 			})
-			.finally(() => setSubmitting(false));
+			.catch((err) => {
+				console.log(err);
+				Alert.alert("Registration Error", err.message, [
+					{
+						text: "OK",
+					},
+				]);
+			})
+			.finally(() => {
+				setSubmitting(false);
+			});
 	};
 
 	return (
 		<ScrollView style={styles(scheme).scrollView}>
 			<View style={styles(scheme).formSection}>
 				<View style={styles(scheme).header}>
-					<Link href={"/(tabs)/profile/"} style={styles(scheme).linkWrapper}>
-						Back
+					<Link
+						href={"/(tabs)/profile/"}
+						onPressIn={() => setBackBtnPressed(true)}
+						onPressOut={() => setBackBtnPressed(false)}
+						style={[styles(scheme).linkWrapper]}
+					>
+						<Text style={styles(scheme).linkText}>Back</Text>
 					</Link>
-					<Text style={styles(scheme).headerText}>Register</Text>
 				</View>
+
 				<PersonalDetailsForm
 					formData={formData}
 					handleInputChange={handleInputChange}
@@ -122,16 +156,19 @@ const styles = (scheme: ColorSchemeName) => {
 		header: {
 			flexDirection: "row",
 			alignItems: "center",
-			padding: Sizes.padding.larger,
+			padding: Sizes.padding.normal,
 
 			borderColor: "#ccc",
 			borderBottomWidth: 1,
 		},
 		linkWrapper: {
-			position: "absolute",
-			left: 0,
-			paddingHorizontal: 10,
 			color: Colors.light.theme,
+			paddingVertical: 4,
+			paddingHorizontal: 10,
+
+			borderColor: Colors.light.theme,
+			borderRadius: 12,
+			borderWidth: 1,
 		},
 		headerText: {
 			flex: 1,
@@ -169,6 +206,9 @@ const styles = (scheme: ColorSchemeName) => {
 			fontWeight: "bold",
 			marginTop: Sizes.margin.large,
 			marginBottom: Sizes.margin.large,
+		},
+		linkText: {
+			color: Colors.light.theme,
 		},
 	});
 };
