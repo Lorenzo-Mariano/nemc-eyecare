@@ -8,18 +8,17 @@ import {
 	StyleSheet,
 	ColorSchemeName,
 	ActivityIndicator,
-	TouchableOpacity,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Sizes } from "@/constants/Sizes";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
+import { Link } from "expo-router";
 
 import { api } from "@/api/api";
 import AddressForm from "@/components/register-form/AddressForm";
 import AuthenticationForm from "@/components/register-form/AuthenticationForm";
 import PersonalDetailsForm from "@/components/register-form/PersonalDetailsForm";
-import { Link } from "expo-router";
 
 export default function Register() {
 	const scheme = useColorScheme();
@@ -45,7 +44,6 @@ export default function Register() {
 		},
 	});
 
-	const [backBtnPressed, setBackBtnPressed] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
 
 	const handleInputChange = (name: string, value: any) => {
@@ -103,12 +101,7 @@ export default function Register() {
 		<ScrollView style={styles(scheme).scrollView}>
 			<View style={styles(scheme).formSection}>
 				<View style={styles(scheme).header}>
-					<Link
-						href={"/(tabs)/profile/"}
-						onPressIn={() => setBackBtnPressed(true)}
-						onPressOut={() => setBackBtnPressed(false)}
-						style={[styles(scheme).linkWrapper]}
-					>
+					<Link href={"/(tabs)/profile/"} style={[styles(scheme).linkWrapper]}>
 						<Text style={styles(scheme).linkText}>Back</Text>
 					</Link>
 				</View>
