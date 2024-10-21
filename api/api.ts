@@ -12,18 +12,20 @@ export const api = {
 			phoneNumber,
 			password,
 			confirmPassword,
-			address, // Add address here
+			address,
 		} = {
 			firstName: formData.firstName.trim(),
 			lastName: formData.lastName.trim(),
 			email: formData.email.trim(),
-			birthday: formData.birthday.toISOString().slice(0, 10),
+			birthday: formData.birthday
+				? new Date(formData.birthday).toISOString().slice(0, 10)
+				: "",
 			gender: formData.gender.trim(),
 			civilStatus: formData.civilStatus.trim(),
 			phoneNumber: formData.phoneNumber.trim(),
 			password: formData.password.trim(),
 			confirmPassword: formData.confirmPassword.trim(),
-			address: formData.address, // Ensure address is passed as is
+			address: formData.address,
 		};
 
 		if (
@@ -36,39 +38,30 @@ export const api = {
 			!phoneNumber ||
 			!password ||
 			!confirmPassword ||
-			!address // Check if address is provided
+			!address
 		) {
-			return {
-				status: "Validation Error",
-				msg: "Please fill in all fields.",
-			};
+			throw new Error("Please fill in all fields.");
 		}
 
 		if (password !== confirmPassword) {
-			return {
-				status: "Validation Error",
-				msg: "Passwords do not match.",
-			};
+			throw new Error("Passwords do not match.");
 		}
 
 		if (password.length < 6) {
-			return {
-				status: "Validation Error",
-				msg: "Password must be at least 6 characters long.",
-			};
+			throw new Error("Password must be at least 6 characters long.");
 		}
 
 		const dataToSend = {
 			firstName,
 			lastName,
 			email,
-			birthday, // Send the selected birthday
+			birthday,
 			gender,
 			civilStatus,
 			phoneNumber,
 			password,
 			confirmPassword,
-			address, // Include the address in the request payload
+			address,
 		};
 
 		try {
@@ -94,21 +87,12 @@ export const api = {
 				const errorMessages = result.errors
 					.map((error: { message: string }) => error.message)
 					.join("\n");
-				return {
-					status: "Registration Error",
-					msg: errorMessages,
-				};
+				throw new Error(errorMessages);
 			} else {
-				return {
-					status: "Registration Error",
-					msg: result.message || "Error occurred.",
-				};
+				throw new Error(result.message || "An error occurred.");
 			}
 		} catch (error) {
-			return {
-				status: "Network Error",
-				msg: "An error occurred during registration.",
-			};
+			throw new Error("Network Error: An error occurred during registration.");
 		}
 	},
 };
