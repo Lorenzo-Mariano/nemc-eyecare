@@ -42,7 +42,7 @@ export default function TabLayout() {
 				backBehavior="history"
 			>
 				<Tabs.Screen
-					name="index"
+					name="home/index"
 					options={{
 						title: "Home",
 						tabBarIcon: ({ color }) => <HomeHospital color={color} />,
