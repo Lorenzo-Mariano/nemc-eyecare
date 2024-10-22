@@ -20,7 +20,7 @@ export default function Index() {
 	const renderServiceItem = ({
 		item,
 	}: {
-		item: { name: string; src: string; description: string };
+		item: { name: string; src: string; description: string; tag: string };
 	}) => {
 		return (
 			<View style={styles.card}>
@@ -48,7 +48,7 @@ export default function Index() {
 					</Text>
 					<TouchableOpacity style={styles.findDoctorBtn}>
 						<Link
-							href={"/(tabs)/(home)/doctors/service-name"}
+							href={`/(tabs)/(home)/doctors/${item.tag}`}
 							style={{ color: Colors.light.theme }}
 						>
 							Find a Doctor
