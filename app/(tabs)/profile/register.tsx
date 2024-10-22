@@ -100,12 +100,6 @@ export default function Register() {
 	return (
 		<ScrollView style={styles(scheme).scrollView}>
 			<View style={styles(scheme).formSection}>
-				<View style={styles(scheme).header}>
-					<Link href={"/(tabs)/profile/"} style={[styles(scheme).linkWrapper]}>
-						<Text style={styles(scheme).linkText}>Back</Text>
-					</Link>
-				</View>
-
 				<PersonalDetailsForm
 					formData={formData}
 					handleInputChange={handleInputChange}
@@ -145,14 +139,6 @@ const styles = (scheme: ColorSchemeName) => {
 		scrollView: {
 			padding: Sizes.padding.large,
 			backgroundColor: Colors.light.darkerBackground,
-		},
-		header: {
-			flexDirection: "row",
-			alignItems: "center",
-			padding: Sizes.padding.normal,
-
-			borderColor: "#ccc",
-			borderBottomWidth: 1,
 		},
 		linkWrapper: {
 			color: Colors.light.theme,

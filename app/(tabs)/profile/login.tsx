@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
 	View,
 	Text,
@@ -9,7 +9,7 @@ import {
 	Alert,
 	TouchableOpacity,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { usePathname, useRouter } from "expo-router";
 import { Sizes } from "@/constants/Sizes";
 
 export default function Login() {
