@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Tabs, usePathname } from "expo-router";
 import {
 	Calendar,
 	HomeHospital,
@@ -9,11 +9,11 @@ import {
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
 import { getHeaderTitle } from "@react-navigation/elements";
-import { useState } from "react";
 import Header from "@/components/Header";
 
 export default function TabLayout() {
 	const scheme = useColorScheme();
+	const currentPath = usePathname();
 
 	return (
 		<IconoirProvider
@@ -24,25 +24,30 @@ export default function TabLayout() {
 			}}
 		>
 			<Tabs
-				screenOptions={{
-					header: ({ options, route }) => {
-						const title = getHeaderTitle(options, route.name);
-						return <Header title={title} />;
-					},
-					tabBarActiveTintColor:
-						scheme === "dark" ? Colors.dark.theme : Colors.light.theme,
-					tabBarShowLabel: false,
-					tabBarStyle: {
-						backgroundColor:
-							scheme === "dark"
-								? Colors.dark.background
-								: Colors.light.background,
-					},
+				screenOptions={() => {
+					const mainTabs = ["/", "/appointments", "/messages", "/profile"];
+					const showBackButton = !mainTabs.includes(currentPath);
+
+					return {
+						header: ({ options, route }) => {
+							const title = getHeaderTitle(options, route.name);
+							return <Header title={title} showBackButton={showBackButton} />;
+						},
+						tabBarActiveTintColor:
+							scheme === "dark" ? Colors.dark.theme : Colors.light.theme,
+						tabBarShowLabel: false,
+						tabBarStyle: {
+							backgroundColor:
+								scheme === "dark"
+									? Colors.dark.background
+									: Colors.light.background,
+						},
+					};
 				}}
 				backBehavior="history"
 			>
 				<Tabs.Screen
-					name="index/index"
+					name="(home)"
 					options={{
 						title: "Home",
 						tabBarIcon: ({ color }) => <HomeHospital color={color} />,

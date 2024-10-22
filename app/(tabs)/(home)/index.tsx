@@ -17,7 +17,11 @@ import { Link } from "expo-router";
 export default function Index() {
 	const scheme = useColorScheme();
 
-	const renderServiceItem = ({ item }: { item: any }) => {
+	const renderServiceItem = ({
+		item,
+	}: {
+		item: { name: string; src: string; description: string };
+	}) => {
 		return (
 			<View style={styles.card}>
 				<Image source={item.src} style={styles.image} contentFit="cover" />
@@ -42,15 +46,15 @@ export default function Index() {
 					>
 						{item.description}
 					</Text>
-					<View style={styles.findDoctorBtn}>
+					<TouchableOpacity style={styles.findDoctorBtn}>
 						<Link
-							href={"/(tabs)/home/doctors/service-name"}
+							href={"/(tabs)/(home)/doctors/service-name"}
 							style={{ color: Colors.light.theme }}
 						>
 							Find a Doctor
 						</Link>
 						<Search color={Colors.light.theme} height={16} />
-					</View>
+					</TouchableOpacity>
 				</View>
 			</View>
 		);
