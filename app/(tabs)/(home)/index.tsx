@@ -84,9 +84,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		overflow: "hidden",
 
-		borderColor: "#ddd",
 		borderRadius: 8,
-		borderWidth: 1,
+		elevation: 6,
 
 		marginBottom: Sizes.margin.small,
 	},

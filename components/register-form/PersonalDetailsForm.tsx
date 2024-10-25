@@ -7,7 +7,7 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { RegisterFormData } from "@/types";
+import { IRegisterFormData } from "@/types";
 import { Sizes } from "@/constants/Sizes";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -18,7 +18,7 @@ export default function PersonalDetailsForm({
 	formData,
 	handleInputChange,
 }: {
-	formData: RegisterFormData;
+	formData: IRegisterFormData;
 	handleInputChange: (name: any, value: any) => void;
 }) {
 	const scheme = useColorScheme();

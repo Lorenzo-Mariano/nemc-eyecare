@@ -7,13 +7,13 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import React, { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import { User } from "@/types";
+import { IUser } from "@/types";
 import AuthNav from "@/components/profile/AuthNav";
 import { Image } from "expo-image";
 
 export default function Profile() {
 	const scheme = useColorScheme();
-	const [user, setUser] = useState<User | null>(null);
+	const [user, setUser] = useState<IUser | null>(null);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const checkAuthStatus = async () => {
@@ -36,7 +36,7 @@ export default function Profile() {
 				);
 
 				const result = await response.json();
-				console.log("Result of Auto Login:", result);
+				console.log("Result of Auto Login:", JSON.stringify(result, null, 2));
 
 				if (response.ok && result.success) {
 					setUser(JSON.parse(userData));
@@ -59,7 +59,7 @@ export default function Profile() {
 		} finally {
 			console.log(
 				"userData after checking token:",
-				await AsyncStorage.getItem("userData")
+				JSON.stringify(await AsyncStorage.getItem("userData"), null, 2)
 			);
 		}
 	};
