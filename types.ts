@@ -1,4 +1,4 @@
-export interface User {
+export interface IUser {
 	_id: string;
 	firstName: string;
 	lastName: string;
@@ -8,9 +8,10 @@ export interface User {
 	phoneNumber: string;
 	createdAt: string;
 	updatedAt: string;
+	// needs an update with address
 }
 
-export interface RegisterFormData {
+export interface IRegisterFormData {
 	firstName: string;
 	lastName: string;
 	email: string;
@@ -28,4 +29,28 @@ export interface RegisterFormData {
 		district: string;
 		zipCode: string;
 	};
+}
+
+export interface IService {
+	_id: string;
+	name: string;
+	description: string;
+	tag: string;
+	requiredSpecialization: "General Ophthalmologist" | "Retina" | "Glaucoma";
+	__v: number;
+}
+
+export interface IDoctor {
+	_id: string;
+	firstName: string;
+	middleName?: string;
+	lastName: string;
+	gender: "male" | "female";
+	specialization: "General Ophthalmologist" | "Retina" | "Glaucoma";
+	servicesProvided: string[];
+}
+
+export interface IFetchDoctorsResponse {
+	service: IService;
+	doctors: IDoctor[];
 }
