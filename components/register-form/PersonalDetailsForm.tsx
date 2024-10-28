@@ -7,7 +7,7 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { IRegisterFormData } from "@/types";
+import { IRegisterFormData } from "@/util/types";
 import { Sizes } from "@/constants/Sizes";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";

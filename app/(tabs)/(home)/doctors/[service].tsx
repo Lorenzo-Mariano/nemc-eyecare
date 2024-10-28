@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet, FlatList, SafeAreaView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
-import { IDoctor, IFetchDoctorsResponse, IService } from "@/types";
+import { IDoctor, IFetchDoctorsResponse, IService } from "@/util/types";
 import DoctorCard from "@/components/DoctorCard";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { Sizes } from "@/constants/Sizes";
 
 export default function Service() {
@@ -10,6 +12,7 @@ export default function Service() {
 	const [doctors, setDoctors] = useState<null | IDoctor[]>();
 	const [searchedService, setSearchedService] = useState<null | IService>();
 	const [fetching, setFetching] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	async function fetchDoctors() {
 		setFetching(true);
@@ -39,6 +42,8 @@ export default function Service() {
 			gender={item.gender}
 			specialization={item.specialization}
 			servicesProvided={item.servicesProvided}
+			service={service}
+			isLoggedIn={isLoggedIn}
 		/>
 	);
 
@@ -46,6 +51,9 @@ export default function Service() {
 		if (service) {
 			fetchDoctors();
 		}
+
+		const userData = AsyncStorage.getItem("userData");
+		setIsLoggedIn(!!userData);
 	}, [service]);
 
 	if (fetching) {

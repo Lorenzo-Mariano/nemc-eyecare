@@ -1,6 +1,6 @@
 import { Text, TextInput, StyleSheet, ColorSchemeName } from "react-native";
 import React from "react";
-import { RegisterFormData } from "@/types";
+import { RegisterFormData } from "@/util/types";
 import { Sizes } from "@/constants/Sizes";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useColorScheme } from "@/hooks/useColorScheme";

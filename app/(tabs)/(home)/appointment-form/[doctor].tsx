@@ -5,20 +5,27 @@ import {
 	StyleSheet,
 	ScrollView,
 	TouchableOpacity,
+	Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
-import { IDoctor } from "@/types";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { IDoctor } from "@/util/types";
 import { Image } from "expo-image";
 import { Sizes } from "@/constants/Sizes";
 import { Colors } from "@/constants/Colors";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { CalendarCheck } from "iconoir-react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AppointmentForm() {
-	const { doctor: doctorId } = useLocalSearchParams<{ doctor: string }>();
+	const { doctor: doctorId, service } = useLocalSearchParams<{
+		doctor: string;
+		service: string;
+	}>();
+	const router = useRouter();
 
 	const [fetching, setFetching] = useState(false);
+	const [submitting, setSubmitting] = useState(false);
 	const [showDatePicker, setShowDatePicker] = useState(false);
 
 	const [doctor, setDoctor] = useState<IDoctor | null>(null);
@@ -48,33 +55,77 @@ export default function AppointmentForm() {
 	}
 
 	async function submitAppointmentRequest() {
+		setSubmitting(true);
+
+		console.log("Submitting...", { appointmentDate, reason });
+
 		if (!appointmentDate || !reason) {
 			console.log("Please fill out both the date and reason fields.");
+			Alert.alert("Error", "Please fill out both the date and reason fields.");
+			setSubmitting(false);
 			return;
 		}
 
 		try {
+			const token = await AsyncStorage.getItem("authToken");
+			const userData = await AsyncStorage.getItem("userData");
+			if (!token || !userData) {
+				console.log("User is not authenticated");
+				Alert.alert(
+					"Authentication Error",
+					"You need to be logged in to make an appointment."
+				);
+				setSubmitting(false);
+				return;
+			}
+			const parsedUserData = JSON.parse(userData);
+
+			const requestBody = {
+				user: parsedUserData,
+				appointmentDate,
+				reason,
+				service,
+			};
+
 			const response = await fetch(
 				`${process.env.EXPO_PUBLIC_DEV_API}/appointments/doctor/${doctorId}`,
 				{
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
 					},
-					body: JSON.stringify({
-						date: appointmentDate.toISOString().slice(0, 10),
-						reason,
-					}),
+					body: JSON.stringify(requestBody),
 				}
 			);
 
+			const res = await response.json();
+
 			if (!response.ok) {
-				throw new Error("Failed to submit the appointment request.");
+				throw new Error(
+					res.message || "Failed to submit the appointment request."
+				);
 			}
 
 			console.log("Appointment request submitted successfully.");
-		} catch (error) {
+			Alert.alert(
+				"Success!",
+				res.result.message || "Appointment request submitted successfully.",
+				[
+					{
+						text: "OK",
+						onPress: () => router.replace("/(tabs)/appointments"),
+					},
+				]
+			);
+		} catch (error: any) {
 			console.error("Error submitting appointment request:", error);
+			Alert.alert(
+				"Error",
+				error.message || "An error occurred while submitting the request."
+			);
+		} finally {
+			setSubmitting(false);
 		}
 	}
 
@@ -185,7 +236,7 @@ export default function AppointmentForm() {
 							color: Colors.light.theme,
 						}}
 					>
-						Send Appointment Request
+						{submitting ? "Sending..." : "Send Appointment Request"}
 					</Text>
 				</TouchableOpacity>
 			</View>

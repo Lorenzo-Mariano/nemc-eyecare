@@ -7,7 +7,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import React, { useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import { IUser } from "@/types";
+import { IUser } from "@/util/types";
 import AuthNav from "@/components/profile/AuthNav";
 import { Image } from "expo-image";
 
@@ -21,7 +21,11 @@ export default function Profile() {
 			const token = await AsyncStorage.getItem("authToken");
 			const userData = await AsyncStorage.getItem("userData");
 
-			console.log("Local Storage User Data:", userData);
+			console.log("Local Storage TOKEN:", token);
+			console.log(
+				"Local Storage User Data:",
+				JSON.stringify(userData, null, 2)
+			);
 
 			if (token && userData) {
 				const response = await fetch(

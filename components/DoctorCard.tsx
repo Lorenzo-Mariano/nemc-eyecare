@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
-import { IDoctor } from "@/types";
+import React, { useState } from "react";
+import { IDoctor } from "@/util/types";
 import { Image } from "expo-image";
 import { Sizes } from "@/constants/Sizes";
 import { Colors } from "@/constants/Colors";
@@ -13,8 +13,9 @@ const DoctorCard = ({
 	lastName,
 	gender,
 	specialization,
-	servicesProvided,
-}: IDoctor) => {
+	service,
+	isLoggedIn,
+}: IDoctor & { service: string; isLoggedIn: boolean }) => {
 	const title = gender === "male" ? "Dr." : "Dra.";
 	const middleInitial = middleName ? ` ${middleName}.` : "";
 
@@ -48,16 +49,30 @@ const DoctorCard = ({
 					borderRadius: 8,
 				}}
 			>
-				<Link
-					href={`/(tabs)/(home)/appointment-form/${_id}`}
-					style={{
-						textAlign: "center",
-						fontWeight: "bold",
-						color: Colors.light.theme,
-					}}
-				>
-					Request an appointment
-				</Link>
+				{isLoggedIn ? (
+					<Link
+						href={`/(tabs)/(home)/appointment-form/${_id}?service=${service}`}
+						style={{
+							textAlign: "center",
+							fontWeight: "bold",
+							color: Colors.light.theme,
+						}}
+					>
+						Request an appointment
+					</Link>
+				) : (
+					<TouchableOpacity>
+						<Text
+							style={{
+								fontWeight: "bold",
+								color: Colors.light.theme,
+								textAlign: "center",
+							}}
+						>
+							Log in to request an appointment.
+						</Text>
+					</TouchableOpacity>
+				)}
 			</TouchableOpacity>
 		</View>
 	);

@@ -35,6 +35,7 @@ export default function Login() {
 			const result = await response.json();
 
 			if (response.ok) {
+				console.log("response.ok:", JSON.stringify(result, null, 2));
 				const { token, user } = result;
 
 				await AsyncStorage.setItem("authToken", token);

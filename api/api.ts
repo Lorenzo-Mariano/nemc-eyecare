@@ -1,4 +1,4 @@
-import { IRegisterFormData } from "@/types";
+import { IRegisterFormData } from "@/util/types";
 
 export const api = {
 	register: async (formData: IRegisterFormData) => {

@@ -1,6 +1,6 @@
 import { Text, TextInput, StyleSheet, ColorSchemeName } from "react-native";
 import React from "react";
-import { RegisterFormData } from "@/types";
+import { IRegisterFormData } from "@/util/types";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Sizes } from "@/constants/Sizes";
@@ -9,7 +9,7 @@ export default function AddressForm({
 	formData,
 	handleAddressChange,
 }: {
-	formData: RegisterFormData;
+	formData: IRegisterFormData;
 	handleAddressChange: (name: any, value: any) => void;
 }) {
 	const scheme = useColorScheme();
@@ -37,7 +37,7 @@ export default function AddressForm({
 				style={styles(scheme).input}
 			/>
 			<TextInput
-				placeholder="Province (optional)"
+				placeholder="Province"
 				value={formData.address.province}
 				onChangeText={(value) => handleAddressChange("province", value)}
 				style={styles(scheme).input}
