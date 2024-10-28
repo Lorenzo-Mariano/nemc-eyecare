@@ -4,7 +4,7 @@ import { IDoctor } from "@/util/types";
 import { Image } from "expo-image";
 import { Sizes } from "@/constants/Sizes";
 import { Colors } from "@/constants/Colors";
-import { Link } from "expo-router";
+import { Href, Link } from "expo-router";
 
 const DoctorCard = ({
 	_id,
@@ -51,7 +51,9 @@ const DoctorCard = ({
 			>
 				{isLoggedIn ? (
 					<Link
-						href={`/(tabs)/(home)/appointment-form/${_id}?service=${service}`}
+						href={
+							`/(tabs)/(home)/appointment-form/${_id}?service=${service}` as Href
+						}
 						style={{
 							textAlign: "center",
 							fontWeight: "bold",

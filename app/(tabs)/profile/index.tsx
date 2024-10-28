@@ -1,5 +1,4 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { Link } from "expo-router";
 import { Sizes } from "@/constants/Sizes";
 import { ScrollView } from "react-native-gesture-handler";
 import { Colors } from "@/constants/Colors";
@@ -97,19 +96,19 @@ export default function Profile() {
 		return age;
 	};
 
-	return (
-		<ScrollView
-			style={{
-				padding: Sizes.padding.normal,
-				backgroundColor:
-					scheme === "dark"
-						? Colors.dark.lighterBackground
-						: Colors.light.darkerBackground,
-			}}
-			contentContainerStyle={styles.page}
-		>
-			<View style={styles.options}>
-				{isLoggedIn && user ? (
+	if (isLoggedIn && user) {
+		return (
+			<ScrollView
+				style={{
+					padding: Sizes.padding.normal,
+					backgroundColor:
+						scheme === "dark"
+							? Colors.dark.lighterBackground
+							: Colors.light.darkerBackground,
+				}}
+				contentContainerStyle={styles.page}
+			>
+				<View style={styles.options}>
 					<View style={styles.userDetailsCard}>
 						<Image
 							style={styles.profilePicture}
@@ -142,9 +141,24 @@ export default function Profile() {
 							<Text style={styles.btnText}>Logout</Text>
 						</TouchableOpacity>
 					</View>
-				) : (
-					<AuthNav />
-				)}
+				</View>
+			</ScrollView>
+		);
+	}
+
+	return (
+		<ScrollView
+			style={{
+				padding: Sizes.padding.normal,
+				backgroundColor:
+					scheme === "dark"
+						? Colors.dark.lighterBackground
+						: Colors.light.darkerBackground,
+			}}
+			contentContainerStyle={styles.page}
+		>
+			<View style={styles.options}>
+				<AuthNav />
 			</View>
 		</ScrollView>
 	);

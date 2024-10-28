@@ -11,6 +11,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IFetchedAppointments } from "@/util/types";
 import AppointmentCard from "@/components/AppointmentCard";
 import { Sizes } from "@/constants/Sizes";
+import { useFocusEffect } from "expo-router";
+import { Colors } from "@/constants/Colors";
 
 export default function Appointments() {
 	const [appointments, setAppointments] = useState<IFetchedAppointments[] | []>(
@@ -50,9 +52,15 @@ export default function Appointments() {
 		}
 	}, []);
 
-	useEffect(() => {
-		fetchAppointments();
-	}, [fetchAppointments]);
+	// useEffect(() => {
+	// 	fetchAppointments();
+	// }, [fetchAppointments]);
+
+	useFocusEffect(
+		React.useCallback(() => {
+			fetchAppointments();
+		}, [fetchAppointments])
+	);
 
 	const onRefresh = () => {
 		setRefreshing(true);
@@ -60,7 +68,18 @@ export default function Appointments() {
 	};
 
 	if (loading && !refreshing) {
-		return <ActivityIndicator size="large" color="#0000ff" />;
+		return (
+			<View
+				style={{
+					flex: 1,
+					backgroundColor: "#fff",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				<ActivityIndicator size="large" color={Colors.light.theme} />
+			</View>
+		);
 	}
 
 	if (error) {

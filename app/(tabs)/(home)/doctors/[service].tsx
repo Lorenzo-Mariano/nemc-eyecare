@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, FlatList, SafeAreaView } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import React, { useState } from "react";
+import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import { IDoctor, IFetchDoctorsResponse, IService } from "@/util/types";
 import DoctorCard from "@/components/DoctorCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -33,6 +33,20 @@ export default function Service() {
 		}
 	}
 
+	async function setAuthState() {
+		const userData = await AsyncStorage.getItem("userData");
+		setIsLoggedIn(!!userData);
+	}
+
+	useFocusEffect(
+		React.useCallback(() => {
+			if (service) {
+				fetchDoctors();
+				setAuthState();
+			}
+		}, [])
+	);
+
 	const renderItem = ({ item }: { item: IDoctor }) => (
 		<DoctorCard
 			_id={item._id}
@@ -46,15 +60,6 @@ export default function Service() {
 			isLoggedIn={isLoggedIn}
 		/>
 	);
-
-	useEffect(() => {
-		if (service) {
-			fetchDoctors();
-		}
-
-		const userData = AsyncStorage.getItem("userData");
-		setIsLoggedIn(!!userData);
-	}, [service]);
 
 	if (fetching) {
 		return (
