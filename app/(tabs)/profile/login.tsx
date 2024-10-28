@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import {
 	View,
 	Text,
@@ -9,11 +9,13 @@ import {
 	Alert,
 	TouchableOpacity,
 } from "react-native";
-import { usePathname, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Sizes } from "@/constants/Sizes";
+import { useAuth } from "@/components/context/AuthContext";
 
 export default function Login() {
 	const router = useRouter();
+	const { setUser, setLoggedIn } = useAuth();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [isSubmitting, setSubmitting] = useState(false);
@@ -52,6 +54,9 @@ export default function Login() {
 						address: user.address,
 					})
 				);
+
+				setUser(user);
+				setLoggedIn(true);
 
 				Alert.alert("Login Successful", `Welcome back, ${user.firstName}!`, [
 					{
@@ -121,9 +126,7 @@ const styles = StyleSheet.create({
 		height: 400,
 		padding: 20,
 		borderRadius: 12,
-
-		borderColor: "#ccc",
-		borderWidth: 1,
+		elevation: 6,
 		justifyContent: "center",
 		backgroundColor: Colors.light.background,
 	},

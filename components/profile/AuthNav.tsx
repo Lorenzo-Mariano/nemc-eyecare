@@ -13,18 +13,18 @@ export default function AuthNav() {
 			style={{
 				padding: Sizes.padding.large,
 				backgroundColor: "#fff",
-				borderColor: "#ccc",
+				elevation: 6,
 				borderRadius: 6,
-				borderWidth: 1,
 				gap: 24,
 			}}
 		>
 			<Text
 				style={{
 					fontWeight: "bold",
+					textAlign: "center",
 					fontSize: Sizes.text.larger,
 					color: scheme === "dark" ? Colors.dark.text : Colors.light.text,
-					marginBottom: Sizes.margin.larger,
+					marginBottom: 32,
 				}}
 			>
 				You are not logged in. Sign up or login to use all features.

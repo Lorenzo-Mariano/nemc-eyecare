@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -7,14 +7,15 @@ import {
 	ScrollView,
 	RefreshControl,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IFetchedAppointments } from "@/util/types";
 import AppointmentCard from "@/components/AppointmentCard";
 import { Sizes } from "@/constants/Sizes";
 import { useFocusEffect } from "expo-router";
 import { Colors } from "@/constants/Colors";
+import { useAuth } from "@/components/context/AuthContext";
 
 export default function Appointments() {
+	const { isLoggedIn, user } = useAuth();
 	const [appointments, setAppointments] = useState<IFetchedAppointments[] | []>(
 		[]
 	);
@@ -23,24 +24,21 @@ export default function Appointments() {
 	const [error, setError] = useState<string | null>(null);
 
 	const fetchAppointments = useCallback(async () => {
+		if (!isLoggedIn || !user?._id) return;
+
 		try {
 			setLoading(true);
-			const userData = await AsyncStorage.getItem("userData");
-			if (!userData) throw new Error("User not logged in");
-
-			const { _id: userId } = JSON.parse(userData);
 
 			const response = await fetch(
-				`${process.env.EXPO_PUBLIC_DEV_API}/appointments/patient/${userId}`
+				`${process.env.EXPO_PUBLIC_DEV_API}/appointments/patient/${user._id}`
 			);
 
 			if (!response.ok) {
-				throw new Error("Failed to fetch appointments");
+				throw new Error("You have no appointments.");
 			}
 
 			const data: IFetchedAppointments[] = await response.json();
-			console.log("Appointments:");
-			console.log(JSON.stringify(data, null, 4));
+			console.log("Appointments:", JSON.stringify(data, null, 4));
 
 			setAppointments(data);
 			setError(null);
@@ -50,18 +48,25 @@ export default function Appointments() {
 			setLoading(false);
 			setRefreshing(false);
 		}
-	}, []);
+	}, [isLoggedIn, user]);
 
 	useFocusEffect(
 		React.useCallback(() => {
-			fetchAppointments();
-		}, [fetchAppointments])
+			if (isLoggedIn) fetchAppointments();
+		}, [isLoggedIn, fetchAppointments])
 	);
 
 	const onRefresh = () => {
 		setRefreshing(true);
 		fetchAppointments();
 	};
+
+	useEffect(() => {
+		if (!isLoggedIn) {
+			setLoading(false);
+			setError("User not logged in");
+		}
+	}, [isLoggedIn]);
 
 	if (loading && !refreshing) {
 		return (
@@ -100,11 +105,11 @@ export default function Appointments() {
 		return (
 			<ScrollView
 				style={{
-					flexGrow: 1,
 					padding: Sizes.padding.normal,
 					backgroundColor: "#fff",
 				}}
 				contentContainerStyle={{
+					flexGrow: 1,
 					justifyContent: "center",
 					alignItems: "center",
 				}}
@@ -112,7 +117,9 @@ export default function Appointments() {
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				}
 			>
-				<Text>{error}</Text>
+				<Text style={{ fontSize: Sizes.text.large, fontWeight: "bold" }}>
+					{error}
+				</Text>
 			</ScrollView>
 		);
 	}

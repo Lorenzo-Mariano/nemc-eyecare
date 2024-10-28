@@ -13,7 +13,6 @@ import { useRouter } from "expo-router";
 import { Sizes } from "@/constants/Sizes";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
-import { Link } from "expo-router";
 
 import { api } from "@/api/api";
 import AddressForm from "@/components/register-form/AddressForm";
@@ -137,7 +136,7 @@ export default function Register() {
 const styles = (scheme: ColorSchemeName) => {
 	return StyleSheet.create({
 		scrollView: {
-			padding: Sizes.padding.large,
+			// padding: Sizes.padding.large,
 			backgroundColor: Colors.light.darkerBackground,
 		},
 		linkWrapper: {
@@ -159,13 +158,14 @@ const styles = (scheme: ColorSchemeName) => {
 		formSection: {
 			backgroundColor: "#fff",
 			padding: Sizes.padding.larger,
-			borderColor: "#ccc",
-			borderWidth: 1,
+			elevation: 6,
 			borderRadius: 12,
-			marginBottom: 24,
+			margin: Sizes.margin.large,
+			marginBottom: 12,
 		},
 		buttonContainer: {
 			marginTop: Sizes.margin.larger,
+			padding: Sizes.padding.larger,
 			marginBottom: 24,
 		},
 		loadingContainer: {

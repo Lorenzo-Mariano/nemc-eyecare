@@ -6,13 +6,14 @@ import DoctorCard from "@/components/DoctorCard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { Sizes } from "@/constants/Sizes";
+import { useAuth } from "@/components/context/AuthContext";
 
 export default function Service() {
 	const { service } = useLocalSearchParams<{ service: string }>();
 	const [doctors, setDoctors] = useState<null | IDoctor[]>();
 	const [searchedService, setSearchedService] = useState<null | IService>();
 	const [fetching, setFetching] = useState(false);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const { isLoggedIn } = useAuth();
 
 	async function fetchDoctors() {
 		setFetching(true);
@@ -33,16 +34,10 @@ export default function Service() {
 		}
 	}
 
-	async function setAuthState() {
-		const userData = await AsyncStorage.getItem("userData");
-		setIsLoggedIn(!!userData);
-	}
-
 	useFocusEffect(
 		React.useCallback(() => {
 			if (service) {
 				fetchDoctors();
-				setAuthState();
 			}
 		}, [])
 	);
