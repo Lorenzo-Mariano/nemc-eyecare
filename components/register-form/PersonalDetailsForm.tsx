@@ -104,6 +104,7 @@ export default function PersonalDetailsForm({
 						mode="date"
 						display="default"
 						onChange={handleDateChange}
+						maximumDate={new Date()}
 					/>
 				)}
 			</View>
