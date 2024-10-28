@@ -54,3 +54,15 @@ export interface IFetchDoctorsResponse {
 	service: IService;
 	doctors: IDoctor[];
 }
+
+export interface IAppointment {
+	_id: string;
+	fromUser: string;
+	toDoctor: string;
+	date: Date;
+	reason: string;
+	type: "online" | "face to face";
+	status: "pending" | "accepted" | "closed";
+	createdAt?: Date;
+	updatedAt?: Date;
+}
