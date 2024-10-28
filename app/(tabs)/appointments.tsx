@@ -128,7 +128,7 @@ export default function Appointments() {
 		<View style={{ flex: 1 }}>
 			<FlatList
 				style={{ backgroundColor: "#fff" }}
-				data={appointments}
+				data={appointments.reverse()}
 				keyExtractor={(item) => item._id.toString()}
 				renderItem={({ item }) => (
 					<AppointmentCard
