@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+	View,
+	Text,
+	TouchableOpacity,
+	StyleSheet,
+	ActivityIndicator,
+} from "react-native";
 import { Sizes } from "@/constants/Sizes";
 import { ScrollView } from "react-native-gesture-handler";
 import { Colors } from "@/constants/Colors";
@@ -14,8 +20,10 @@ export default function Profile() {
 	const scheme = useColorScheme();
 	const [user, setUser] = useState<IUser | null>(null);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [fetching, setFetching] = useState(false);
 
 	const checkAuthStatus = async () => {
+		setFetching(true);
 		try {
 			const token = await AsyncStorage.getItem("authToken");
 			const userData = await AsyncStorage.getItem("userData");
@@ -64,6 +72,7 @@ export default function Profile() {
 				"userData after checking token:",
 				JSON.stringify(await AsyncStorage.getItem("userData"), null, 2)
 			);
+			setFetching(false);
 		}
 	};
 
@@ -95,6 +104,21 @@ export default function Profile() {
 
 		return age;
 	};
+
+	if (fetching) {
+		return (
+			<View
+				style={{
+					flex: 1,
+					backgroundColor: "#fff",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				<ActivityIndicator size="large" color={Colors.light.theme} />
+			</View>
+		);
+	}
 
 	if (isLoggedIn && user) {
 		return (
