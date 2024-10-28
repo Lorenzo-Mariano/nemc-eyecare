@@ -205,6 +205,7 @@ export default function AppointmentForm() {
 						mode="date"
 						display="default"
 						onChange={handleDateChange}
+						minimumDate={new Date()}
 					/>
 				)}
 				<Text style={styles.label}>Reason for Appointment</Text>

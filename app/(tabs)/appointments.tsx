@@ -52,10 +52,6 @@ export default function Appointments() {
 		}
 	}, []);
 
-	// useEffect(() => {
-	// 	fetchAppointments();
-	// }, [fetchAppointments]);
-
 	useFocusEffect(
 		React.useCallback(() => {
 			fetchAppointments();
@@ -104,19 +100,19 @@ export default function Appointments() {
 		return (
 			<ScrollView
 				style={{
-					flex: 1,
-					flexDirection: "row",
+					flexGrow: 1,
 					padding: Sizes.padding.normal,
 					backgroundColor: "#fff",
 				}}
 				contentContainerStyle={{
+					justifyContent: "center",
 					alignItems: "center",
 				}}
 				refreshControl={
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				}
 			>
-				<Text>Error {error}</Text>
+				<Text>{error}</Text>
 			</ScrollView>
 		);
 	}

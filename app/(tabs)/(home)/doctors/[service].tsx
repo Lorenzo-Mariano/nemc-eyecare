@@ -79,7 +79,18 @@ export default function Service() {
 	}
 
 	if (doctors && doctors.length === 0) {
-		return <Text>No doctors found for this service.</Text>;
+		return (
+			<View
+				style={{
+					flex: 1,
+					alignItems: "center",
+					justifyContent: "center",
+					backgroundColor: "#fff",
+				}}
+			>
+				<Text>No doctors found for this service.</Text>
+			</View>
+		);
 	}
 
 	if (doctors && doctors.length > 0) {
@@ -101,8 +112,17 @@ export default function Service() {
 	}
 
 	return (
-		<View>
-			<Text>Something went wrong...</Text>
+		<View
+			style={{
+				flex: 1,
+				alignItems: "center",
+				justifyContent: "center",
+				backgroundColor: "#fff",
+			}}
+		>
+			<Text>
+				Something went wrong. Check your connection and reload the page.
+			</Text>
 		</View>
 	);
 }
