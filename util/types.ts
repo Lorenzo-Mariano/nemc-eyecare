@@ -4,6 +4,7 @@ export interface IUser {
 	lastName: string;
 	email: string;
 	birthday: string | Date;
+	type: "admin" | "patient";
 	gender: string;
 	phoneNumber: string;
 	createdAt: string;
