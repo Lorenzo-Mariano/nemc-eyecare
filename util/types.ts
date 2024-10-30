@@ -72,3 +72,26 @@ export interface IFetchedAppointments extends IAppointment {
 	toDoctor: IDoctor;
 	serviceRequested: IService;
 }
+
+export interface IAnalytics {
+	doctors: { count: { male: number; female: number } };
+	users: {
+		patients: { count: { male: number; female: number } };
+		admins: { count: number };
+	};
+	appointments: {
+		count: {
+			all: number;
+			eyeExam: number;
+			cataract: number;
+			laser: number;
+			eyeglassFitting: number;
+			retinopathy: number;
+			glaucoma: number;
+			visualFieldTest: number;
+			ocularCoherence: number;
+			fluoresceinAngiogram: number;
+			status: { closed: number; pending: number; accepted: number };
+		};
+	};
+}

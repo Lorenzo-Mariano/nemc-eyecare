@@ -1,0 +1,32 @@
+{
+	"cli": {
+		"version": ">= 12.6.1",
+		"appVersionSource": "remote"
+	},
+	"build": {
+		"development": {
+			"developmentClient": true,
+			"distribution": "internal",
+			"env": {
+				"EXPO_PUBLIC_DEV_API": "https://nemc-eyecare-web.vercel.app/api"
+			}
+		},
+		"preview": {
+			"android": {
+				"buildType": "apk"
+			},
+			"env": {
+				"EXPO_PUBLIC_DEV_API": "https://nemc-eyecare-web.vercel.app/api"
+			}
+		},
+		"production": {
+			"autoIncrement": true,
+			"env": {
+				"EXPO_PUBLIC_DEV_API": "https://nemc-eyecare-web.vercel.app/api"
+			}
+		}
+	},
+	"submit": {
+		"production": {}
+	}
+}
