@@ -167,7 +167,7 @@ export default function Analytics() {
 				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 			}
 		>
-			<View>
+			<View style={{ alignItems: "center" }}>
 				<Text style={{ fontSize: 18, textAlign: "center", marginVertical: 10 }}>
 					Appointment Status Distribution
 				</Text>
@@ -184,6 +184,7 @@ export default function Analytics() {
 						backgroundGradientFrom: "#e3f2fd",
 						backgroundGradientTo: "#e3f2fd",
 						color: (opacity = 1) => `rgba(33, 150, 243, ${opacity})`,
+						decimalPlaces: 2,
 					}}
 					style={{ marginVertical: 8, borderRadius: 8 }}
 				/>
@@ -216,16 +217,18 @@ export default function Analytics() {
 					</View>
 
 					{/* Table Data */}
-					<FlatList
-						data={serviceList}
-						keyExtractor={(item) => item.name}
-						renderItem={({ item, index }) => (
-							<View style={[styles.row, index % 2 === 0 && styles.evenRow]}>
-								<Text style={styles.cell}>{item.name}</Text>
-								<Text style={styles.cell}>{item.count}</Text>
+
+					{serviceList.map((service, index) => {
+						return (
+							<View
+								key={Math.random()}
+								style={[styles.row, index % 2 === 0 && styles.evenRow]}
+							>
+								<Text style={styles.cell}>{service.name}</Text>
+								<Text style={styles.cell}>{service.count}</Text>
 							</View>
-						)}
-					/>
+						);
+					})}
 				</SafeAreaView>
 				<PieChart
 					data={servicePieData.map((item) => ({
@@ -233,16 +236,126 @@ export default function Analytics() {
 						legendFontColor: "#333",
 						legendFontSize: 12,
 					}))}
+					width={screenWidth - 30}
+					height={170}
+					chartConfig={{
+						color: (opacity = 1) => `rgba(0, 123, 255, ${opacity})`,
+					}}
+					accessor="count"
+					backgroundColor="transparent"
+					paddingLeft="-20"
+					style={{ marginVertical: 16, borderRadius: 8 }}
+				/>
+			</View>
+			<View>
+				<Text style={{ fontSize: 18, textAlign: "center" }}>
+					Doctors' Gender Distribution
+				</Text>
+				<PieChart
+					data={doctorGenderData.map((item) => ({
+						name: item.name,
+						count: item.count,
+						color: item.color,
+						legendFontColor: "#333",
+						legendFontSize: 14,
+					}))}
 					width={screenWidth - 40}
 					height={220}
 					chartConfig={{
 						color: (opacity = 1) => `rgba(0, 123, 255, ${opacity})`,
+						decimalPlaces: 0,
+					}}
+					accessor="count"
+					backgroundColor="transparent"
+					paddingLeft="15"
+					style={{ marginVertical: 16, borderRadius: 8 }}
+				/>
+				{/* Legend for Doctors */}
+				<View
+					style={{
+						flexDirection: "row",
+						justifyContent: "center",
+						marginTop: 10,
+						marginBottom: 32,
+					}}
+				>
+					{doctorGenderData.map((item, index) => (
+						<View
+							key={index}
+							style={{
+								flexDirection: "row",
+								alignItems: "center",
+								marginHorizontal: 10,
+							}}
+						>
+							<View
+								style={{
+									width: 15,
+									height: 15,
+									backgroundColor: item.color,
+									marginRight: 5,
+								}}
+							/>
+							<Text style={{ fontSize: 14 }}>{item.name}</Text>
+						</View>
+					))}
+				</View>
+			</View>
+
+			{/* Patients' Gender Distribution */}
+			<View>
+				<Text style={{ fontSize: 18, textAlign: "center", marginVertical: 10 }}>
+					Patients' Gender Distribution
+				</Text>
+				<PieChart
+					data={patientGenderData.map((item) => ({
+						name: item.name,
+						count: item.count,
+						color: item.color,
+						legendFontColor: "#333",
+						legendFontSize: 14,
+					}))}
+					width={screenWidth - 40}
+					height={220}
+					chartConfig={{
+						color: (opacity = 1) => `rgba(0, 123, 255, ${opacity})`,
+						decimalPlaces: 0,
 					}}
 					accessor="count"
 					backgroundColor="transparent"
 					paddingLeft="15"
 					style={{ marginVertical: 8, borderRadius: 8 }}
 				/>
+				{/* Legend for Patients */}
+				<View
+					style={{
+						flexDirection: "row",
+						justifyContent: "center",
+						marginVertical: 10,
+					}}
+				>
+					{patientGenderData.map((item, index) => (
+						<View
+							key={index}
+							style={{
+								flexDirection: "row",
+								alignItems: "center",
+								marginHorizontal: 10,
+								marginBottom: 16,
+							}}
+						>
+							<View
+								style={{
+									width: 15,
+									height: 15,
+									backgroundColor: item.color,
+									marginRight: 5,
+								}}
+							/>
+							<Text style={{ fontSize: 14 }}>{item.name}</Text>
+						</View>
+					))}
+				</View>
 			</View>
 		</ScrollView>
 	);
