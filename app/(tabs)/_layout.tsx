@@ -1,6 +1,7 @@
 import { Tabs, usePathname } from "expo-router";
 import {
 	Calendar,
+	Database,
 	HomeHospital,
 	IconoirProvider,
 	Mail,
@@ -10,10 +11,12 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
 import { getHeaderTitle } from "@react-navigation/elements";
 import Header from "@/components/Header";
+import { useAuth } from "@/components/context/AuthContext";
 
 export default function TabLayout() {
 	const scheme = useColorScheme();
 	const currentPath = usePathname();
+	const { user } = useAuth();
 
 	return (
 		<IconoirProvider
@@ -51,6 +54,14 @@ export default function TabLayout() {
 					options={{
 						title: "Home",
 						tabBarIcon: ({ color }) => <HomeHospital color={color} />,
+					}}
+				/>
+				<Tabs.Screen
+					name="analytics"
+					options={{
+						href: user?.type === "admin" ? "/(tabs)/analytics" : null,
+						title: "Analytics",
+						tabBarIcon: ({ color }) => <Database color={color} />,
 					}}
 				/>
 				<Tabs.Screen
